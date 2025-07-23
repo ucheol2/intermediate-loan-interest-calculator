@@ -1,0 +1,279 @@
+body {
+  font-family: "Nanum Gothic", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background: #fff8f0;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-top: 1.5em;
+  color: #234;
+}
+
+p {
+  text-align: center;
+  color: #234;
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+form#loan-form {
+  background: #fff;
+  max-width: 540px;
+  margin: 2em auto 1.5em auto;
+  padding: 2em 2em 1.5em 2em;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 rgba(30,40,60,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 1em 0;
+}
+
+legend {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #ff9800;
+  margin-bottom: 1em;
+}
+
+#loans-list, #repays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.loan-row, .repay-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  background: #fffdfa;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px 0 rgba(255,152,0,0.07);
+  border: 1px solid #ffe0b2;
+  margin-bottom: 0.5em;
+  padding: 0.7em 1em 0.5em 1em;
+  gap: 1em;
+  max-width: 100%;
+}
+.loan-index {
+  min-width: 2.5em;
+  color: #ff9800;
+  font-weight: bold;
+  font-size: 1.08em;
+  margin-right: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-top: 0.2em;
+}
+.loan-card, .repay-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  flex: 1 1 auto;
+}
+.input-label {
+  font-size: 0.8em;
+  color: #b97a00;
+  margin-bottom: 0.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+input[type="number"], input[type="date"] {
+  font-family: inherit;
+  font-size: 1em;
+  padding: 0.4em 0.7em;
+  border: 1px solid #ffd699;
+  border-radius: 6px;
+  background: #fafdff;
+  transition: border 0.2s;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.loan-korean, .repay-korean {
+  min-width: 4.5em;
+  color: #ff9800;
+  font-size: 0.76em;
+  font-weight: 500;
+  margin-top: -1.2em;
+}
+button, input[type="submit"] {
+  font-family: inherit;
+  font-size: 1em;
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5em 1.2em;
+  margin-top: 0.5em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 rgba(255,152,0,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+button:hover, input[type="submit"]:hover {
+  background: #fb8c00;
+  box-shadow: 0 4px 16px 0 rgba(255,152,0,0.13);
+}
+button:active, input[type="submit"]:active {
+  background: #ef6c00;
+}
+
+button.remove-loan, button.remove-repay {
+  margin-left: 0.7em;
+  background: #fff3e0;
+  color: #ff9800;
+  border: 1px solid #ffd699;
+  font-size: 0.98em;
+  padding: 0.35em 0.9em;
+  border-radius: 6px;
+  box-shadow: none;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+  height: 2.2em;
+  align-self: flex-start;
+}
+
+button.remove-loan:hover, button.remove-repay:hover {
+  background: #ff9800;
+  color: #fff;
+  border: 1.5px solid #fb8c00;
+}
+
+hr {
+  border: none;
+  border-top: 1.5px solid #ffe0b2;
+  margin: 2em 0 1.5em 0;
+}
+
+#result {
+  background: #fff;
+  max-width: 540px;
+  margin: 0 auto 2em auto;
+  padding: 1.5em 2em 2em 2em;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 rgba(30,40,60,0.08);
+}
+#result h3 {
+  margin-top: 0;
+  color: #ff9800;
+  font-size: 1.15em;
+  margin-bottom: 1em;
+}
+#total-interest {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #fb8c00;
+  margin-bottom: 1em;
+}
+#monthly-interest ul {
+  padding-left: 1.2em;
+  margin: 0;
+}
+#monthly-interest li {
+  margin-bottom: 0.3em;
+  font-size: 1em;
+  color: #234;
+}
+
+.monthly-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5em;
+  background: #fffdfa;
+  font-size: 0.98em;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px 0 rgba(255,152,0,0.04);
+}
+.monthly-table th, .monthly-table td {
+  padding: 0.6em 0.7em;
+  border-bottom: 1px solid #ffe0b2;
+}
+.monthly-table th {
+  background: #fff3e0;
+  color: #b97a00;
+  font-weight: bold;
+  text-align: left;
+  font-size: 0.98em;
+}
+.monthly-table td {
+  color: #234;
+  font-size: 1em;
+}
+.monthly-table td:last-child {
+  text-align: right;
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.monthly-table tr:last-child td {
+  border-bottom: none;
+}
+@media (max-width: 600px) {
+  .monthly-table th, .monthly-table td {
+    padding: 0.5em 0.3em;
+    font-size: 0.92em;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 0 0.8em;
+  }
+  form#loan-form, #result {
+    max-width: 98vw;
+    padding: 1em 0.5em;
+  }
+  h1, h2 {
+    font-size: 1.1em;
+  }
+  p {
+    font-size: 0.8em;
+  }
+  .loan-row, .repay-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.2em;
+    padding: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+  .loan-index {
+    margin-bottom: 0.6em;
+    margin-right: 0;
+    text-align: left;
+    justify-content: flex-start;
+    padding-top: 0;
+    font-size: 0.8em;
+  }
+  .loan-card, .repay-card {
+    gap: .8em;
+  }
+  .loan-korean, .repay-korean {
+    margin-top: -1em;
+  }
+  input[type="number"], input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  button.remove-loan, button.remove-repay {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0.4em;
+    align-self: stretch;
+    font-size: 0.8em;
+  }
+} 

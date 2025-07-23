@@ -36,10 +36,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const row = document.createElement('div');
         row.className = 'loan-row';
         row.innerHTML = `
-            <span class="loan-label">${n}차</span>
-            <input type="number" class="loan-amount" placeholder="금액(원)" value="${amount}" required>
-            <span class="loan-korean"></span>
-            <input type="date" class="loan-date" value="${date}" required>
+            <span class="loan-index">${n}차</span>
+            <div class="loan-card">
+                <label class="input-label">금액
+                  <input type="number" class="loan-amount" placeholder="금액(원)" value="${amount}" required>
+                </label>
+                <span class="loan-korean"></span>
+                <label class="input-label">실행일
+                  <input type="date" class="loan-date" value="${date}" required>
+                </label>
+            </div>
             <button type="button" class="remove-loan">삭제</button>
         `;
         const amountInput = row.querySelector('.loan-amount');
@@ -69,9 +75,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const row = document.createElement('div');
         row.className = 'repay-row';
         row.innerHTML = `
-            <input type="number" class="repay-amount" placeholder="금액(원)" value="${amount}" required>
-            <span class="repay-korean"></span>
-            <input type="date" class="repay-date" value="${date}" required>
+            <div class="repay-card">
+                <label class="input-label">금액
+                  <input type="number" class="repay-amount" placeholder="금액(원)" value="${amount}" required>
+                </label>
+                <span class="repay-korean"></span>
+                <label class="input-label">상환일
+                  <input type="date" class="repay-date" value="${date}" required>
+                </label>
+            </div>
             <button type="button" class="remove-repay">삭제</button>
         `;
         const amountInput = row.querySelector('.repay-amount');
@@ -176,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 transactions.push(new Transaction(amount, date));
             }
         }
-        // 중도 상환 입력값 수집 (계산 시 음수로 변환)
+        // 중도 상환 입력값 수집 (음수로 변환)
         const repayRows = repaysList.querySelectorAll('.repay-row');
         for (const row of repayRows) {
             const amount = parseFloat(row.querySelector('.repay-amount').value);
@@ -208,9 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
         saveFormToStorage();
     };
 
-    // 월별 이자 내역 HTML 생성
+    // 월별 이자 내역 HTML 생성 (표로)
     function renderMonthlyInterest(daily, lastDate, firstDate) {
-        let html = '<ul>';
+        let html = '<table class="monthly-table"><thead><tr><th>구간</th><th>이자(원)</th></tr></thead><tbody>';
         // 첫 구간: firstDate ~ 2024-01-10
         const firstMonthEnd = parseKSTDate("2024-01-10");
         let periodStart = firstDate;
@@ -223,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalInterest += daily[d].interest;
             }
         }
-        html += `<li>${periodStartStr} ~ ${periodEndStr} | 이자: ${Math.round(totalInterest).toLocaleString()}원`;
+        html += `<tr><td>${periodStartStr} ~ ${periodEndStr}</td><td>${Math.round(totalInterest).toLocaleString()}</td></tr>`;
         // 이후 구간: 2024-01-11부터 매월 11일~다음달 10일
         let monthStart = parseKSTDate("2024-01-11");
         while (monthStart <= lastDate) {
@@ -246,12 +258,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     totalInterest += daily[d].interest;
                 }
             }
-            html += `<li>${monthStartStr} ~ ${periodEndStr} | 이자: ${Math.round(totalInterest).toLocaleString()}원`;
+            html += `<tr><td>${monthStartStr} ~ ${periodEndStr}</td><td>${Math.round(totalInterest).toLocaleString()}</td></tr>`;
             // 다음 구간의 시작일은 이번 구간의 끝 다음날(11일)
             monthStart = new Date(periodEnd);
             monthStart.setDate(monthStart.getDate() + 1);
         }
-        html += '</ul>';
+        html += '</tbody></table>';
         return html;
     }
 }); 
