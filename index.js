@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <button type="button" class="remove-repay">삭제</button>
         `;
         const amountInput = row.querySelector('.repay-amount');
+        amountInput.min = 0;
         const koreanSpan = row.querySelector('.repay-korean');
         function updateKorean() {
             const val = parseInt(amountInput.value, 10);
@@ -124,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 만기일
         const maturity = document.getElementById('maturity').value;
         const data = { loans, repays, maturity };
+        console.log(data);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
@@ -174,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 transactions.push(new Transaction(amount, date));
             }
         }
-        // 중도 상환 입력값 수집 (음수로 변환)
+        // 중도 상환 입력값 수집 (계산 시 음수로 변환)
         const repayRows = repaysList.querySelectorAll('.repay-row');
         for (const row of repayRows) {
             const amount = parseFloat(row.querySelector('.repay-amount').value);
@@ -202,8 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
         totalInterestDiv.textContent = `총 이자: ${Math.round(totalInterest).toLocaleString()}원`;
         // 월별 이자 내역
         monthlyInterestDiv.innerHTML = renderMonthlyInterest(daily, lastDate, firstDate);
-        // 이벤트별 이자 내역
-        eventPeriodsDiv.innerHTML = renderEventPeriods(daily, transactions, ratePeriods, parseKSTDate(maturity));
         // 저장
         saveFormToStorage();
     };
@@ -252,57 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
             monthStart.setDate(monthStart.getDate() + 1);
         }
         html += '</ul>';
-        return html;
-    }
-
-    // 이벤트별 이자 내역 HTML 생성 (printEventPeriods 참고)
-    function renderEventPeriods(daily, transactions, ratePeriods, maturity) {
-        // 이벤트 날짜 수집
-        const eventDates = new Set(transactions.map(t => dateToString(t.date)));
-        ratePeriods.forEach(rp => eventDates.add(dateToString(rp.start)));
-        eventDates.add(dateToString(maturity));
-        const eventDatesSorted = Array.from(eventDates).sort();
-        // 이벤트 맵핑
-        const txMap = {};
-        transactions.forEach(t => { txMap[dateToString(t.date)] = t.amount; });
-        const rateMap = {};
-        ratePeriods.forEach(rp => { rateMap[dateToString(rp.start)] = rp.rate; });
-        // 표 헤더
-        let html = `<table border="1" style="border-collapse:collapse; margin-top:1em;">
-            <thead><tr><th>구간</th><th>원금</th><th>금리(%)</th><th>일수</th><th>이자</th><th>이벤트</th></tr></thead><tbody>`;
-        for (let i = 0; i < eventDatesSorted.length - 1; i++) {
-            const start = eventDatesSorted[i];
-            const endDate = new Date(eventDatesSorted[i + 1]);
-            endDate.setDate(endDate.getDate() - 1);
-            const end = dateToString(endDate);
-            if (start > end) continue;
-            let totalInterest = 0;
-            let days = 0;
-            for (const d in daily) {
-                if (d >= start && d <= end) {
-                    totalInterest += daily[d].interest;
-                    days++;
-                }
-            }
-            const principal = daily[start] ? daily[start].principal : 0;
-            const rate = daily[start] ? daily[start].rate : 0;
-            const eventStrs = [];
-            if (txMap[start] !== undefined) {
-                const amt = txMap[start];
-                if (amt > 0) eventStrs.push(`대출(+${amt.toLocaleString()})`);
-                else eventStrs.push(`상환(${amt.toLocaleString()})`);
-            }
-            if (rateMap[start] !== undefined) {
-                eventStrs.push(`금리(${rateMap[start]}%)`);
-            }
-            if (start === dateToString(maturity)) {
-                eventStrs.push("만기");
-            }
-            if (eventStrs.length === 0) eventStrs.push("-");
-            const periodStr = `${start} ~ ${end}`;
-            html += `<tr><td>${periodStr}</td><td style="text-align:right">${principal.toLocaleString()}</td><td style="text-align:right">${rate.toFixed(2)}</td><td style="text-align:right">${days}</td><td style="text-align:right">${Math.round(totalInterest).toLocaleString()}</td><td>${eventStrs.join(' ')}</td></tr>`;
-        }
-        html += '</tbody></table>';
         return html;
     }
 }); 
