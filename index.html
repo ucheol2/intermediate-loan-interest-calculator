@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>청계SK뷰 중도금 이자 계산해보기</title>
+</head>
+<body>
+    <h1>청계SK뷰 중도금 이자 계산해보기</h1>
+    <h2>일반분양(신한은행)</h2>
+    <form id="loan-form">
+        <fieldset>
+            <legend>대출 실행</legend>
+            <div id="loans-list">
+            </div>
+            <button type="button" id="add-loan">+ 대출 실행 추가</button>
+        </fieldset>
+        <fieldset>
+            <legend>중도 상환</legend>
+            <div id="repays-list">
+            </div>
+            <button type="button" id="add-repay">+ 중도 상환 추가</button>
+        </fieldset>
+        <fieldset>
+            <legend>대출 종료일</legend>
+            <input type="date" id="maturity" name="maturity" required>
+        </fieldset>
+        <button type="submit">계산하기</button>
+    </form>
+    <hr>
+    <div id="result">
+        <h3>계산 결과</h3>
+        <div id="total-interest"></div>
+        <div id="event-periods"></div>
+        <div id="monthly-periods"></div>
+    </div>
+    <script src="calculator.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
+
